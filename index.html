@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Futuro Importa! | Transformando Caminhos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            deep: '#542080',      /* Roxo profundo */
+                            vibrant: '#8629B8',   /* Roxo vibrante */
+                            intense: '#B94BD5',   /* Lilás intenso */
+                            pastel: '#D99AF0',    /* Lilás pastel */
+                            pinkLilac: '#F0B8F5', /* Rosa lilás */
+                            lightPink: '#F8DDF8', /* Rosa clarinho */
+                            offwhite: '#F7F2FA',  /* Off-white */
+                            plum: '#30203F'       /* Ameixa escuro */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F7F2FA;
+            color: #30203F;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F2FA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D99AF0;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B94BD5;
+        }
+
+        .gradient-brand {
+            background: linear-gradient(135deg, #542080 0%, #8629B8 50%, #B94BD5 100%);
+        }
+
+        .gradient-banner {
+            background: linear-gradient(135deg, #30203F 0%, #542080 60%, #8629B8 100%);
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #cv-preview-card, #cv-preview-card * {
+                visibility: visible;
+            }
+            #cv-preview-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-brand-pastel selection:text-brand-plum">
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-brand-pastel/30 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo Oficial da Marca -->
+            <div class="flex items-center gap-3 cursor-pointer select-none" onclick="switchTab('vagas')">
+                <div class="w-12 h-12 gradient-brand rounded-2xl flex items-center justify-center text-white shadow-lg shadow-brand-deep/20 ring-2 ring-brand-pastel/40">
+                    <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-xl font-extrabold tracking-tight text-brand-deep">O FUTURO</span>
+                        <span class="text-xl font-extrabold tracking-tight text-brand-vibrant">IMPORTA!</span>
+                    </div>
+                    <span class="block text-[10px] uppercase tracking-widest font-bold text-brand-intense -mt-1">Transformando Caminhos</span>
+                </div>
+            </div>
+
+            <!-- Nav Items (Desktop) -->
+            <nav class="hidden md:flex items-center gap-1 bg-brand-offwhite p-1.5 rounded-full border border-brand-pastel/40">
+                <button onclick="switchTab('vagas')" id="nav-vagas" class="nav-btn px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 text-white gradient-brand shadow-sm">
+                    <i class="fa-solid fa-briefcase mr-2"></i>Feed de Vagas
+                </button>
+                <button onclick="switchTab('curriculo')" id="nav-curriculo" class="nav-btn px-5 py-2 rounded-full text-sm font-semibold text-brand-plum hover:text-brand-vibrant transition-all duration-200">
+                    <i class="fa-solid fa-file-invoice mr-2"></i>Gerador de CV
+                </button>
+                <button onclick="switchTab('cursos')" id="nav-cursos" class="nav-btn px-5 py-2 rounded-full text-sm font-semibold text-brand-plum hover:text-brand-vibrant transition-all duration-200">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>Cursos Grátis
+                </button>
+                <button onclick="switchTab('sobre')" id="nav-sobre" class="nav-btn px-5 py-2 rounded-full text-sm font-semibold text-brand-plum hover:text-brand-vibrant transition-all duration-200">
+                    <i class="fa-solid fa-heart mr-2"></i>Sobre Nós
+                </button>
+                <button onclick="switchTab('admin')" id="nav-admin" class="nav-btn hidden px-5 py-2 rounded-full text-sm font-extrabold text-amber-700 bg-amber-50 hover:bg-amber-100 transition-all duration-200 border border-amber-200">
+                    <i class="fa-solid fa-shield-halved mr-2"></i>Painel Admin
+                </button>
+            </nav>
+
+            <!-- User Auth Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Logged Out View -->
+                <div id="auth-logged-out" class="flex items-center gap-2">
+                    <button onclick="openModal('login-modal')" class="px-4 py-2 text-sm font-bold text-brand-deep hover:text-brand-vibrant transition">
+                        Entrar
+                    </button>
+                    <button onclick="openModal('register-modal')" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white gradient-brand hover:opacity-95 shadow-md shadow-brand-deep/20 transition">
+                        Cadastrar
+                    </button>
+                </div>
+
+                <!-- Logged In View -->
+                <div id="auth-logged-in" class="hidden flex items-center gap-3">
+                    <div class="flex items-center gap-2 bg-brand-offwhite pl-3 pr-4 py-1.5 rounded-full border border-brand-pastel/40">
+                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-brand-deep text-white font-bold flex items-center justify-center text-xs shadow">
+                            U
+                        </div>
+                        <div class="text-left leading-tight">
+                            <span id="user-name-display" class="block text-xs font-bold text-brand-plum max-w-[120px] truncate">Usuário</span>
+                            <span id="user-badge" class="block text-[10px] text-brand-vibrant font-extrabold uppercase">Candidato</span>
+                        </div>
+                    </div>
+
+                    <!-- Post Button Visible strictly for Admin or Company -->
+                    <button id="btn-post-job" onclick="openModal('post-job-modal')" class="hidden px-4 py-2 bg-brand-vibrant hover:bg-brand-deep text-white text-xs font-bold rounded-xl shadow transition items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Postar Vaga
+                    </button>
+
+                    <button onclick="logout()" title="Sair da Conta" class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-brand-deep text-xl p-2 focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-brand-pastel/30 bg-white px-4 py-4 flex-col gap-2">
+            <button onclick="switchTab('vagas'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-brand-plum font-semibold hover:bg-brand-offwhite flex items-center gap-2">
+                <i class="fa-solid fa-briefcase text-brand-vibrant w-5"></i> Feed de Vagas
+            </button>
+            <button onclick="switchTab('curriculo'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-brand-plum font-semibold hover:bg-brand-offwhite flex items-center gap-2">
+                <i class="fa-solid fa-file-invoice text-brand-vibrant w-5"></i> Gerador de CV
+            </button>
+            <button onclick="switchTab('cursos'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-brand-plum font-semibold hover:bg-brand-offwhite flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-brand-vibrant w-5"></i> Cursos Grátis
+            </button>
+            <button onclick="switchTab('sobre'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-brand-plum font-semibold hover:bg-brand-offwhite flex items-center gap-2">
+                <i class="fa-solid fa-heart text-brand-vibrant w-5"></i> Sobre Nós
+            </button>
+            <button id="mobile-nav-admin" onclick="switchTab('admin'); toggleMobileMenu()" class="hidden w-full text-left px-4 py-2.5 rounded-xl text-amber-800 font-extrabold bg-amber-50 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-600 w-5"></i> Painel do Criador (Admin)
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+        
+        <!-- ==================== TAB: VAGAS (FEED LINKEDIN STYLE) ==================== -->
+        <section id="tab-vagas" class="tab-content py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Banner Oficial -->
+            <div class="relative rounded-3xl gradient-banner text-white p-6 md:p-10 mb-8 overflow-hidden shadow-2xl border border-brand-vibrant/30">
+                <div class="absolute -right-12 -top-12 w-96 h-96 bg-brand-intense/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-lightPink/20 text-brand-pinkLilac text-xs font-bold mb-3 border border-brand-pastel/30">
+                        <i class="fa-solid fa-sparkles"></i> Oportunidades em Todos os Estados & Cidades do Brasil
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-2 leading-tight uppercase">
+                        O Futuro Importa!
+                    </h1>
+                    <p class="text-brand-pastel font-extrabold text-base md:text-lg uppercase tracking-wider mb-3">
+                        Transformando Caminhos
+                    </p>
+                    <p class="text-brand-offwhite/90 text-xs md:text-sm mb-5 leading-relaxed max-w-2xl">
+                        Orientação, oportunidades e apoio para você construir um futuro melhor! Candidate-se diretamente na plataforma, envie seu currículo por WhatsApp ou por E-mail diretamente às empresas recrutadoras.
+                    </p>
+
+                    <!-- Google Jobs Quick Search Action -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button onclick="searchGoogleJobs()" class="px-4 py-2.5 bg-white text-brand-deep hover:bg-brand-lightPink font-extrabold rounded-xl text-xs shadow-lg flex items-center gap-2 transition">
+                            <i class="fa-brands fa-google text-red-500"></i> Buscar Vagas no Google Jobs Brasil
+                        </button>
+                        <span class="text-[11px] text-brand-pastel">Integrado aos motores de busca oficiais</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Layout with LinkedIn Feed Style -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left Column: Search & Filters -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-brand-pastel/30 space-y-4 sticky top-24">
+                        <h3 class="font-extrabold text-brand-plum text-base border-b border-brand-pastel/30 pb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-filter text-brand-vibrant"></i> Filtrar Oportunidades
+                        </h3>
+
+                        <!-- Keyword -->
+                        <div>
+                            <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Palavra-chave</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-brand-intense text-xs"></i>
+                                <input type="text" id="filter-keyword" onkeyup="filterJobs()" placeholder="Cargo, empresa ou área" class="w-full pl-9 pr-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-xl text-xs focus:ring-2 focus:ring-brand-vibrant text-brand-plum font-medium outline-none">
+                            </div>
+                        </div>
+
+                        <!-- State -->
+                        <div>
+                            <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Estado (UF)</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-map-location-dot absolute left-3 top-1/2 -translate-y-1/2 text-brand-intense text-xs"></i>
+                                <select id="filter-state" onchange="handleStateFilterChange()" class="w-full pl-9 pr-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-xl text-xs focus:ring-2 focus:ring-brand-vibrant text-brand-plum font-medium outline-none appearance-none">
+                                    <option value="">Todos os Estados (Brasil)</option>
+                                    <option value="AC">Acre (AC)</option><option value="AL">Alagoas (AL)</option><option value="AP">Amapá (AP)</option><option value="AM">Amazonas (AM)</option><option value="BA">Bahia (BA)</option><option value="CE">Ceará (CE)</option><option value="DF">Distrito Federal (DF)</option><option value="ES">Espírito Santo (ES)</option><option value="GO">Goiás (GO)</option><option value="MA">Maranhão (MA)</option><option value="MT">Mato Grosso (MT)</option><option value="MS">Mato Grosso do Sul (MS)</option><option value="MG">Minas Gerais (MG)</option><option value="PA">Pará (PA)</option><option value="PB">Paraíba (PB)</option><option value="PR">Paraná (PR)</option><option value="PE">Pernambuco (PE)</option><option value="PI">Piauí (PI)</option><option value="RJ">Rio de Janeiro (RJ)</option><option value="RN">Rio Grande do Norte (RN)</option><option value="RS">Rio Grande do Sul (RS)</option><option value="RO">Rondônia (RO)</option><option value="RR">Roraima (RR)</option><option value="SC">Santa Catarina (SC)</option><option value="SP">São Paulo (SP)</option><option value="SE">Sergipe (SE)</option><option value="TO">Tocantins (TO)</option><option value="Remoto">100% Remoto (Nacional)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- City -->
+                        <div>
+                            <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Cidade</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-city absolute left-3 top-1/2 -translate-y-1/2 text-brand-intense text-xs"></i>
+                                <select id="filter-city" onchange="filterJobs()" class="w-full pl-9 pr-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-xl text-xs focus:ring-2 focus:ring-brand-vibrant text-brand-plum font-medium outline-none appearance-none">
+                                    <option value="">Todas as Cidades</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Modality -->
+                        <div>
+                            <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Modalidade</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-laptop-house absolute left-3 top-1/2 -translate-y-1/2 text-brand-intense text-xs"></i>
+                                <select id="filter-modality" onchange="filterJobs()" class="w-full pl-9 pr-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-xl text-xs focus:ring-2 focus:ring-brand-vibrant text-brand-plum font-medium outline-none appearance-none">
+                                    <option value="">Todas Modalidades</option>
+                                    <option value="Presencial">Presencial</option>
+                                    <option value="Remoto">Remoto</option>
+                                    <option value="Híbrido">Híbrido</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex flex-col gap-2">
+                            <button onclick="resetJobFilters()" class="w-full py-2 bg-brand-offwhite hover:bg-brand-lightPink text-brand-plum text-xs font-extrabold rounded-xl transition">
+                                Limpar Filtros
+                            </button>
+                            <button onclick="searchGoogleJobs()" class="w-full py-2 border border-brand-vibrant text-brand-vibrant hover:bg-brand-vibrant hover:text-white text-xs font-extrabold rounded-xl transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-google"></i> Vagas no Google Jobs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Posts Feed (LinkedIn Style) -->
+                <div class="lg:col-span-8 space-y-6">
+                    
+                    <!-- Post Prompt Box (Visible for Admin / Company) -->
+                    <div id="company-post-prompt" class="hidden bg-white rounded-2xl p-4 shadow-sm border border-brand-pastel/40 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full gradient-brand text-white font-black flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <button onclick="openModal('post-job-modal')" class="w-full text-left bg-brand-offwhite hover:bg-brand-lightPink/50 text-slate-500 font-semibold text-xs px-4 py-3 rounded-full border border-brand-pastel/40 transition">
+                            Anunciar uma nova vaga de emprego para candidatos de todo o Brasil...
+                        </button>
+                    </div>
+
+                    <!-- Candidate Notice -->
+                    <div id="candidate-feed-notice" class="bg-brand-offwhite border border-brand-pastel/60 rounded-2xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-shield-cat text-brand-vibrant text-xl"></i>
+                            <div>
+                                <h4 class="text-xs font-extrabold text-brand-plum">Feed Oficial de Oportunidades</h4>
+                                <p class="text-[11px] text-slate-600">Postagens verificadas por empresas parceiras e pela administração.</p>
+                            </div>
+                        </div>
+                        <span id="job-count-badge" class="text-xs bg-brand-lightPink text-brand-deep font-extrabold px-3 py-1 rounded-full border border-brand-pastel">0 vagas</span>
+                    </div>
+
+                    <!-- Feed Container -->
+                    <div id="jobs-container" class="space-y-6">
+                        <!-- LinkedIn-like Job Cards Rendered Dynamically -->
+                    </div>
+
+                    <div id="no-jobs-msg" class="hidden text-center py-16 bg-white rounded-3xl border border-dashed border-brand-pastel">
+                        <i class="fa-solid fa-newspaper text-5xl text-brand-pastel mb-3"></i>
+                        <h3 class="text-lg font-bold text-brand-plum">Nenhuma publicação encontrada para esses filtros.</h3>
+                        <p class="text-slate-500 text-xs mt-1 mb-4">Você pode pesquisar vagas abertas em plataformas externas pelo Google Jobs.</p>
+                        <button onclick="searchGoogleJobs()" class="px-5 py-2.5 bg-brand-deep text-white rounded-xl text-xs font-bold shadow">
+                            Buscar no Google Jobs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: PAINEL ADMINISTRADOR (DONO / CRIADOR) ==================== -->
+        <section id="tab-admin" class="tab-content hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-amber-500/10 border border-amber-300 rounded-3xl p-6 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <span class="text-[10px] font-black uppercase tracking-widest bg-amber-200 text-amber-900 px-3 py-1 rounded-full">Painel Exclusivo do Criador</span>
+                    <h1 class="text-2xl md:text-3xl font-black text-brand-plum mt-2">Relatório Geral e Controle da Plataforma</h1>
+                    <p class="text-xs text-slate-600 mt-1">Visão completa dos acessos, novos cadastros e dados de uso de "O Futuro Importa!".</p>
+                </div>
+                <button onclick="openModal('post-job-modal')" class="px-5 py-2.5 bg-brand-deep hover:bg-brand-vibrant text-white font-extrabold rounded-xl text-xs shadow transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle"></i> Postar Vaga como Admin
+                </button>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                <div class="bg-white p-5 rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Total de Acessos</span>
+                    <div class="flex items-center justify-between mt-2">
+                        <span id="stat-visits" class="text-2xl font-black text-brand-plum">0</span>
+                        <i class="fa-solid fa-eye text-brand-vibrant text-xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Candidatos</span>
+                    <div class="flex items-center justify-between mt-2">
+                        <span id="stat-candidates" class="text-2xl font-black text-brand-plum">0</span>
+                        <i class="fa-solid fa-users text-emerald-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Empresas Parceiras</span>
+                    <div class="flex items-center justify-between mt-2">
+                        <span id="stat-companies" class="text-2xl font-black text-brand-plum">0</span>
+                        <i class="fa-solid fa-building text-brand-deep text-xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Vagas Ativas</span>
+                    <div class="flex items-center justify-between mt-2">
+                        <span id="stat-jobs" class="text-2xl font-black text-brand-plum">0</span>
+                        <i class="fa-solid fa-briefcase text-brand-intense text-xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Candidaturas</span>
+                    <div class="flex items-center justify-between mt-2">
+                        <span id="stat-applies" class="text-2xl font-black text-brand-plum">0</span>
+                        <i class="fa-solid fa-paper-plane text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users & Access Log Table -->
+            <div class="bg-white rounded-3xl border border-brand-pastel/40 shadow-sm overflow-hidden mb-8">
+                <div class="p-6 border-b border-brand-pastel/30 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-bold text-brand-plum">Relatório Completo de Usuários e Registros de Acesso</h3>
+                        <p class="text-xs text-slate-500">Histórico em tempo real das interações no site</p>
+                    </div>
+                    <button onclick="clearSystemLogs()" class="text-xs font-bold text-red-600 hover:underline">Limpar Dados de Teste</button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-brand-offwhite text-brand-plum font-extrabold uppercase border-b border-brand-pastel/30">
+                            <tr>
+                                <th class="p-4">Data / Hora</th>
+                                <th class="p-4">Nome / Empresa</th>
+                                <th class="p-4">Perfil</th>
+                                <th class="p-4">E-mail</th>
+                                <th class="p-4">CPF / CNPJ</th>
+                                <th class="p-4">Última Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-table" class="divide-y divide-brand-pastel/20 text-slate-700">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: GERADOR DE CURRÍCULO ==================== -->
+        <section id="tab-curriculo" class="tab-content hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-vibrant bg-brand-lightPink px-3 py-1 rounded-full">Ferramenta Gratuita</span>
+                <h1 class="text-3xl font-extrabold text-brand-plum mt-2">Gerador de Currículo Profissional</h1>
+                <p class="text-slate-600 text-sm">Monte um currículo moderno no padrão oficial da plataforma O Futuro Importa! e faça o download em PDF.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Form Column -->
+                <div class="lg:col-span-6 bg-white p-6 rounded-2xl shadow-sm border border-brand-pastel/40 space-y-5">
+                    <h2 class="text-lg font-bold text-brand-deep border-b pb-2 border-brand-pastel/30 flex items-center gap-2">
+                        <i class="fa-solid fa-user-pen"></i> Suas Informações
+                    </h2>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Nome Completo</label>
+                            <input type="text" id="cv-name" oninput="updateCV()" placeholder="Ex: Lucas Ferreira" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-vibrant">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Cargo Desejado</label>
+                                <input type="text" id="cv-title" oninput="updateCV()" placeholder="Ex: Assistente Administrativo" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-vibrant">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-brand-plum uppercase mb-1">E-mail</label>
+                                <input type="email" id="cv-email" oninput="updateCV()" placeholder="lucas@email.com" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-vibrant">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Telefone / WhatsApp</label>
+                                <input type="text" id="cv-phone" oninput="updateCV()" placeholder="(11) 98888-8888" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-vibrant">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Cidade - Estado</label>
+                                <input type="text" id="cv-location" oninput="updateCV()" placeholder="São Paulo - SP" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-vibrant">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Resumo / Objetivo Profissional</label>
+                            <textarea id="cv-summary" oninput="updateCV()" rows="3" placeholder="Profissional em busca de oportunidades..." class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-vibrant"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 border-t pt-4 border-brand-pastel/30">
+                        <h3 class="text-xs font-extrabold text-brand-vibrant uppercase tracking-wider">Última Experiência Profissional</h3>
+                        <div>
+                            <input type="text" id="cv-exp-title" oninput="updateCV()" placeholder="Empresa & Cargo" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none">
+                        </div>
+                        <div>
+                            <input type="text" id="cv-exp-period" oninput="updateCV()" placeholder="Período (Ex: Mar 2023 - Atualmente)" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none">
+                        </div>
+                        <div>
+                            <textarea id="cv-exp-desc" oninput="updateCV()" rows="2" placeholder="Principais atividades..." class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 border-t pt-4 border-brand-pastel/30">
+                        <h3 class="text-xs font-extrabold text-brand-vibrant uppercase tracking-wider">Formação & Habilidades</h3>
+                        <div>
+                            <input type="text" id="cv-edu" oninput="updateCV()" placeholder="Formação Acadêmica" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none">
+                        </div>
+                        <div>
+                            <input type="text" id="cv-skills" oninput="updateCV()" placeholder="Habilidades (separadas por vírgula)" class="w-full px-3 py-2 bg-brand-offwhite border border-brand-pastel/40 rounded-lg text-sm outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Column -->
+                <div class="lg:col-span-6 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-brand-plum flex items-center gap-2">
+                            <i class="fa-solid fa-eye text-brand-vibrant"></i> Pré-visualização
+                        </h2>
+                        <button onclick="window.print()" class="px-4 py-2 text-white gradient-brand hover:opacity-90 rounded-xl text-xs font-extrabold shadow flex items-center gap-2 transition">
+                            <i class="fa-solid fa-print"></i> Salvar / Imprimir PDF
+                        </button>
+                    </div>
+
+                    <div id="cv-preview-card" class="bg-white p-8 rounded-2xl shadow-xl border border-brand-pastel/40 min-h-[600px] flex flex-col justify-between">
+                        <div>
+                            <div class="border-b-2 border-brand-deep pb-4 mb-6">
+                                <h1 id="preview-name" class="text-2xl font-black text-brand-deep uppercase tracking-wide">Seu Nome Aqui</h1>
+                                <p id="preview-title" class="text-brand-vibrant font-extrabold text-sm uppercase">Seu Cargo Desejado</p>
+                                
+                                <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600 mt-3">
+                                    <span id="preview-email"><i class="fa-solid fa-envelope text-brand-vibrant mr-1"></i>email@exemplo.com</span>
+                                    <span id="preview-phone"><i class="fa-solid fa-phone text-brand-vibrant mr-1"></i>(00) 00000-0000</span>
+                                    <span id="preview-location"><i class="fa-solid fa-location-dot text-brand-vibrant mr-1"></i>Cidade - UF</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h3 class="text-xs font-extrabold text-brand-deep uppercase tracking-wider mb-2">Objetivo Profissional</h3>
+                                <p id="preview-summary" class="text-xs text-slate-700 leading-relaxed italic">
+                                    Preencha os campos ao lado para visualizar o currículo formatado no padrão oficial.
+                                </p>
+                            </div>
+
+                            <div class="mb-6">
+                                <h3 class="text-xs font-extrabold text-brand-deep uppercase tracking-wider mb-2">Experiência Profissional</h3>
+                                <div class="border-l-2 border-brand-pastel pl-3">
+                                    <div class="flex justify-between items-baseline">
+                                        <h4 id="preview-exp-title" class="text-xs font-bold text-brand-plum">Cargo & Empresa</h4>
+                                        <span id="preview-exp-period" class="text-[10px] text-slate-400 font-semibold">Período</span>
+                                    </div>
+                                    <p id="preview-exp-desc" class="text-xs text-slate-600 mt-1">Descrição das atividades efetuadas.</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h3 class="text-xs font-extrabold text-brand-deep uppercase tracking-wider mb-2">Formação Acadêmica</h3>
+                                <p id="preview-edu" class="text-xs text-slate-700 font-semibold">Ensino Médio / Superior / Técnico</p>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xs font-extrabold text-brand-deep uppercase tracking-wider mb-2">Habilidades</h3>
+                                <div id="preview-skills" class="flex flex-wrap gap-1.5">
+                                    <span class="px-2.5 py-1 bg-brand-lightPink text-brand-deep font-bold rounded text-[11px]">Proatividade</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-brand-pastel/30 pt-4 mt-8 text-center text-[10px] text-slate-400 no-print flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-graduation-cap text-brand-vibrant"></i> Modelo Oficial — <strong>O Futuro Importa!</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB: CURSOS GRATUITOS ==================== -->
+        <section id="tab-cursos" class="tab-content hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 text-center max-w-2xl mx-auto">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-brand-vibrant bg-brand-lightPink px-3 py-1 rounded-full border border-brand-pastel/60">Capacitação Gratuita</span>
+                <h1 class="text-3xl font-black text-brand-plum mt-3">Plataformas de Cursos On-line com Certificado</h1>
+                <p class="text-slate-600 text-sm mt-1">Principais instituições brasileiras para aperfeiçoar seu currículo gratuitamente.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courses-grid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB: SOBRE NÓS ==================== -->
+        <section id="tab-sobre" class="tab-content hidden py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="w-20 h-20 gradient-brand text-white rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-xl shadow-brand-deep/20">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-black text-brand-plum mb-1">O FUTURO IMPORTA!</h1>
+            <p class="text-brand-vibrant font-extrabold text-sm md:text-base uppercase tracking-widest mb-6">Transformando Caminhos</p>
+            
+            <p class="text-slate-700 text-base md:text-lg leading-relaxed mb-8 bg-white p-6 rounded-3xl border border-brand-pastel/30 shadow-sm">
+                Orientação, oportunidades e apoio para você construir um futuro melhor! Nossa missão é conectar candidatos e empresas parceiras em todas as regiões do Brasil de forma rápida, acessível e sem custos.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <div class="p-6 bg-white rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <i class="fa-solid fa-compass text-brand-vibrant text-2xl mb-3"></i>
+                    <h3 class="font-extrabold text-brand-plum mb-1">Orientação</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Gerador de currículos e apoio na preparação para o mercado.</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <i class="fa-solid fa-briefcase text-brand-deep text-2xl mb-3"></i>
+                    <h3 class="font-extrabold text-brand-plum mb-1">Oportunidades</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Feed de vagas estilo rede social com envio por WhatsApp e E-mail.</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border border-brand-pastel/40 shadow-sm">
+                    <i class="fa-solid fa-hands-holding-child text-brand-intense text-2xl mb-3"></i>
+                    <h3 class="font-extrabold text-brand-plum mb-1">Apoio Social</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Acesso facilitado às maiores plataformas de cursos online do país.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-plum text-brand-pastel py-10 border-t border-brand-deep mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <div class="flex items-center justify-center md:justify-start gap-2 text-white font-extrabold text-lg mb-1">
+                    <i class="fa-solid fa-graduation-cap text-brand-pastel"></i> O FUTURO IMPORTA!
+                </div>
+                <p class="text-xs text-brand-pastel/80">TRANSFORMANDO CAMINHOS — Orientação, oportunidades e apoio.</p>
+                <p class="text-[11px] text-slate-400 mt-1">© 2026 O Futuro Importa! Todos os direitos reservados.</p>
+            </div>
+            <div class="flex gap-6 text-xs font-semibold">
+                <button onclick="switchTab('vagas')" class="hover:text-white transition">Feed de Vagas</button>
+                <button onclick="switchTab('curriculo')" class="hover:text-white transition">Gerador CV</button>
+                <button onclick="switchTab('cursos')" class="hover:text-white transition">Cursos</button>
+                <button onclick="switchTab('sobre')" class="hover:text-white transition">Sobre Nós</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-brand-pastel/30 overflow-hidden">
+            <div class="p-6 bg-brand-offwhite border-b border-brand-pastel/30 flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-black text-brand-plum">Acessar a Plataforma</h3>
+                    <p class="text-xs text-slate-500">Entre com sua conta (Admin ou Candidato)</p>
+                </div>
+                <button onclick="closeModal('login-modal')" class="text-slate-400 hover:text-brand-plum text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="handleLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-extrabold text-brand-plum uppercase mb-1">E-mail / Usuário</label>
+                    <input type="text" id="login-email" required placeholder="seu.email@exemplo.com ou usuário adm" class="w-full px-4 py-2.5 bg-brand-offwhite border border-brand-pastel/40 rounded-xl text-sm focus:ring-2 focus:ring-brand-vibrant outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-brand-plum uppercase mb-1">Senha</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-brand-offwhite border border-brand-pastel/40 rounded-xl text-sm focus:ring-2 focus:ring-brand-vibrant outline-none">
+                </div>
+                <button type="submit" class="w-full py-3 text-white gradient-brand font-bold rounded-xl shadow-lg transition text-sm">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div id="register-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-brand-pastel/30 overflow-hidden my-8">
+            <div class="p-6 bg-brand-offwhite border-b border-brand-pastel/30 flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-black text-brand-plum">Criar Conta no O Futuro Importa!</h3>
+                    <p class="text-xs text-slate-500">Candidatos visualizam vagas | Empresas publicam vagas</p>
+                </div>
+                <button onclick="closeModal('register-modal')" class="text-slate-400 hover:text-brand-plum text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Profile Switcher Tabs -->
+            <div class="p-6 pb-0">
+                <div class="grid grid-cols-2 gap-2 p-1.5 bg-brand-offwhite rounded-2xl border border-brand-pastel/40">
+                    <button id="tab-btn-candidate" onclick="toggleRegisterType('candidato')" class="py-2.5 text-xs font-extrabold rounded-xl transition gradient-brand text-white shadow-md">
+                        <i class="fa-solid fa-user mr-1.5"></i> Sou Candidato
+                    </button>
+                    <button id="tab-btn-company" onclick="toggleRegisterType('empresa')" class="py-2.5 text-xs font-extrabold rounded-xl transition text-brand-plum hover:text-brand-vibrant">
+                        <i class="fa-solid fa-building mr-1.5"></i> Empresa Parceira
+                    </button>
+                </div>
+            </div>
+
+            <!-- Candidate Form -->
+            <form id="form-candidate" onsubmit="handleCandidateRegister(event)" class="p-6 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Nome Completo *</label>
+                        <input type="text" id="cand-name" required placeholder="Ex: Maria dos Santos" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">CPF *</label>
+                        <input type="text" id="cand-cpf" oninput="maskCPF(this)" required placeholder="000.000.000-00" maxlength="14" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">E-mail Válido *</label>
+                        <input type="email" id="cand-email" required placeholder="seu.email@exemplo.com" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Celular com DDD *</label>
+                        <input type="text" id="cand-phone" oninput="maskPhone(this)" required placeholder="(11) 99999-9999" maxlength="15" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="border-t pt-3 border-brand-pastel/30">
+                    <span class="block text-xs font-extrabold text-brand-vibrant uppercase tracking-wider mb-2">Endereço Completo</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="text" id="cand-cep" oninput="maskCEP(this)" required placeholder="CEP (00000-000)" maxlength="9" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                        <input type="text" id="cand-address" required placeholder="Rua, Nº e Bairro" class="sm:col-span-2 w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mt-3">
+                        <input type="text" id="cand-city" required placeholder="Cidade" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                        <select id="cand-state" required class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                            <option value="">UF</option>
+                            <option value="SP">SP</option><option value="RJ">RJ</option><option value="MG">MG</option><option value="BA">BA</option><option value="RS">RS</option><option value="PR">PR</option><option value="DF">DF</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Senha *</label>
+                    <input type="password" required placeholder="••••••••" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                </div>
+
+                <button type="submit" class="w-full py-3 text-white gradient-brand font-bold rounded-xl shadow-lg transition text-sm">
+                    Continuar para Montagem do Currículo
+                </button>
+            </form>
+
+            <!-- Company Form -->
+            <form id="form-company" onsubmit="handleCompanyRegister(event)" class="p-6 space-y-4 hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Razão Social / Nome da Empresa *</label>
+                        <input type="text" id="comp-name" required placeholder="Empresa Parceira Ltda" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">CNPJ *</label>
+                        <input type="text" id="comp-cnpj" oninput="maskCNPJ(this)" required placeholder="00.000.000/0001-00" maxlength="18" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">E-mail Corporativo Válido *</label>
+                        <input type="email" id="comp-email" required placeholder="contato@empresa.com.br" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                        <span class="text-[10px] text-amber-700 font-medium">Requer domínio corporativo (não aceita @gmail/@hotmail)</span>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Responsável do RH *</label>
+                        <input type="text" id="comp-responsible" required placeholder="Ex: Roberto Silva" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">WhatsApp Recrutamento *</label>
+                        <input type="text" id="comp-phone" oninput="maskPhone(this)" required placeholder="(11) 99999-9999" maxlength="15" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Cidade / Estado da Sede *</label>
+                        <input type="text" id="comp-location" required placeholder="Ex: São Paulo - SP" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Senha *</label>
+                    <input type="password" required placeholder="••••••••" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-sm outline-none">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-brand-deep hover:bg-brand-vibrant text-white font-bold rounded-xl shadow-lg transition text-sm">
+                    Cadastrar Empresa Parceira
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ONBOARDING CV MODAL (Obrigatório no Primeiro Cadastro) -->
+    <div id="onboarding-cv-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-brand-pastel/30 overflow-hidden my-8 p-6 space-y-4">
+            <div class="border-b pb-3 border-brand-pastel/30">
+                <span class="text-[10px] font-black bg-brand-lightPink text-brand-deep px-3 py-1 rounded-full">Passo 2 de 2</span>
+                <h3 class="text-xl font-black text-brand-plum mt-1">Monte seu Currículo Inicial</h3>
+                <p class="text-xs text-slate-500">Essas informações preencherão automaticamente o seu gerador de currículo e o perfil para vagas.</p>
+            </div>
+
+            <form onsubmit="handleOnboardingCV(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Cargo Desejado *</label>
+                    <input type="text" id="onb-title" required placeholder="Ex: Auxiliar Administrativo" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-xs outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Resumo / Objetivo Profissional *</label>
+                    <textarea id="onb-summary" required rows="2" placeholder="Profissional proativo em busca de novas oportunidades..." class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-xs outline-none"></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Última Experiência (Cargo & Empresa)</label>
+                        <input type="text" id="onb-exp" placeholder="Ex: Atendente - Comércio Local" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Formação Acadêmica</label>
+                        <input type="text" id="onb-edu" placeholder="Ex: Ensino Médio Completo" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-xs outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Habilidades Principais (separadas por vírgula)</label>
+                    <input type="text" id="onb-skills" placeholder="Excel, Atendimento ao Cliente, Organização" class="w-full px-3 py-2 bg-brand-offwhite border rounded-lg text-xs outline-none">
+                </div>
+
+                <button type="submit" class="w-full py-3 text-white gradient-brand font-bold rounded-xl shadow-lg transition text-sm mt-4">
+                    Concluir e Acessar a Plataforma
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- POST JOB MODAL (LinkedIn Style Options) -->
+    <div id="post-job-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-brand-pastel/30 overflow-hidden my-8">
+            <div class="p-6 bg-brand-offwhite border-b border-brand-pastel/30 flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-black text-brand-plum">Publicar Oportunidade no Feed</h3>
+                    <p class="text-xs text-slate-500">Crie uma postagem de vaga idêntica ao estilo LinkedIn</p>
+                </div>
+                <button onclick="closeModal('post-job-modal')" class="text-slate-400 hover:text-brand-plum text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="handlePostJob(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Título do Cargo / Vaga *</label>
+                    <input type="text" id="job-title-input" required placeholder="Ex: Desenvolvedor Web / Assistente Comercial" class="w-full px-3 py-2 border rounded-lg text-sm outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Estado (UF) *</label>
+                        <select id="job-state-input" required class="w-full px-3 py-2 border rounded-lg text-sm outline-none">
+                            <option value="SP">SP</option><option value="RJ">RJ</option><option value="MG">MG</option><option value="BA">BA</option><option value="RS">RS</option><option value="PR">PR</option><option value="PE">PE</option><option value="CE">CE</option><option value="DF">DF</option><option value="Remoto">Remoto</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Modalidade *</label>
+                        <select id="job-modality-input" required class="w-full px-3 py-2 border rounded-lg text-sm outline-none">
+                            <option value="Presencial">Presencial</option>
+                            <option value="Remoto">Remoto</option>
+                            <option value="Híbrido">Híbrido</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Nível *</label>
+                        <select id="job-level-input" required class="w-full px-3 py-2 border rounded-lg text-sm outline-none">
+                            <option value="Estágio">Estágio</option>
+                            <option value="Júnior">Júnior</option>
+                            <option value="Pleno">Pleno</option>
+                            <option value="Sênior">Sênior</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Cidade *</label>
+                        <input type="text" id="job-city-input" required placeholder="Ex: Campinas" class="w-full px-3 py-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Salário</label>
+                        <input type="text" id="job-salary-input" placeholder="Ex: R$ 2.500 / mês" class="w-full px-3 py-2 border rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-brand-plum uppercase mb-1">Texto da Publicação / Descrição da Vaga *</label>
+                    <textarea id="job-desc-input" required rows="3" placeholder="Escreva o texto do post detalhando as responsabilidades, requisitos e diferenciais da vaga..." class="w-full px-3 py-2 border rounded-lg text-sm outline-none"></textarea>
+                </div>
+
+                <!-- Flexible Contact Channels for Candidatos -->
+                <div class="border-t pt-4 border-brand-pastel/30 space-y-3">
+                    <span class="block text-xs font-extrabold text-brand-vibrant uppercase tracking-wider">Canais de Recebimento de Currículo</span>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i> WhatsApp para Envio</label>
+                            <input type="text" id="job-whatsapp-input" oninput="maskPhone(this)" placeholder="(11) 99999-9999" class="w-full px-3 py-2 border rounded-lg text-xs outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-envelope text-brand-vibrant mr-1"></i> E-mail para Envio</label>
+                            <input type="email" id="job-contact-email-input" placeholder="recrutamento@empresa.com" class="w-full px-3 py-2 border rounded-lg text-xs outline-none">
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="job-allow-platform" checked class="w-4 h-4 text-brand-vibrant rounded border-slate-300 focus:ring-brand-vibrant">
+                        <label for="job-allow-platform" class="text-xs font-bold text-brand-plum">Permitir candidatura direta pela Plataforma O Futuro Importa!</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 text-white gradient-brand font-bold rounded-xl shadow-lg transition text-sm">
+                    Publicar no Feed
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- APPLY MODAL COM OPÇÃO DE CV E PERGUNTAS (Matemática, Português e Lógica) -->
+    <div id="apply-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-brand-pastel/30 p-6 my-8 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <div>
+                    <h3 class="text-lg font-black text-brand-plum">Candidatura Direta</h3>
+                    <p id="apply-job-title" class="text-xs font-extrabold text-brand-vibrant">Cargo da Vaga</p>
+                </div>
+                <button onclick="closeModal('apply-modal')" class="text-slate-400 hover:text-brand-plum text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="confirmApplication(event)" class="space-y-4 text-xs">
+                <!-- Origem do Currículo -->
+                <div class="bg-brand-offwhite p-3 rounded-2xl border border-brand-pastel/40 space-y-2">
+                    <span class="block font-extrabold text-brand-plum uppercase">1. Escolha o Currículo para Envio</span>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2 font-medium cursor-pointer">
+                            <input type="radio" name="cv-source" value="platform" checked onchange="toggleUploadBox(false)" class="text-brand-vibrant">
+                            <span>Usar o currículo gerado na plataforma O Futuro Importa!</span>
+                        </label>
+                        <label class="flex items-center gap-2 font-medium cursor-pointer">
+                            <input type="radio" name="cv-source" value="upload" onchange="toggleUploadBox(true)" class="text-brand-vibrant">
+                            <span>Anexar meu próprio arquivo (PDF ou Word)</span>
+                        </label>
+                    </div>
+                    <div id="upload-box" class="hidden pt-2">
+                        <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-lightPink file:text-brand-deep hover:file:bg-brand-pastel">
+                    </div>
+                </div>
+
+                <!-- Perguntas de Triagem (Matemática, Português e Lógica) -->
+                <div class="space-y-3 border-t pt-3 border-brand-pastel/30">
+                    <span class="block font-extrabold text-brand-plum uppercase">2. Triagem Rápida de Competências</span>
+                    
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Português: Qual frase está gramaticalmente correta?</label>
+                        <select id="quiz-pt" required class="w-full p-2 bg-brand-offwhite border rounded-lg">
+                            <option value="">Selecione uma opção</option>
+                            <option value="errado">Nós vai na reunião amanhã.</option>
+                            <option value="certo">Fizemos todas as entregas no prazo estabelecido.</option>
+                            <option value="errado">Houveram muitos candidatos para a vaga.</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Matemática Básica: Se um produto custa R$ 120,00 e tem 15% de desconto, qual o valor final?</label>
+                        <select id="quiz-mat" required class="w-full p-2 bg-brand-offwhite border rounded-lg">
+                            <option value="">Selecione uma opção</option>
+                            <option value="errado">R$ 95,00</option>
+                            <option value="certo">R$ 102,00</option>
+                            <option value="errado">R$ 110,00</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Raciocínio Lógico: Se todos os gatos miavam e Fifi mia, logo...</label>
+                        <select id="quiz-log" required class="w-full p-2 bg-brand-offwhite border rounded-lg">
+                            <option value="">Selecione uma opção</option>
+                            <option value="certo">Fifi possui características comuns à espécie dos gatos.</option>
+                            <option value="errado">Fifi é obrigatoriamente um cão.</option>
+                            <option value="errado">Nenhum gato mia à noite.</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 text-white gradient-brand font-bold rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
+                    Enviar Candidatura com Respostas
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // System Data Initialization with localStorage Backup
+        let currentUser = JSON.parse(localStorage.getItem('ofi_current_user')) || null;
+        let systemStats = JSON.parse(localStorage.getItem('ofi_stats')) || { visits: 148, applies: 42 };
+        
+        let usersLog = JSON.parse(localStorage.getItem('ofi_users_log')) || [
+            { name: "Administrador / Criador", email: "Ofu7ur01mp0r74", type: "admin", idNumber: "000.000.000-00", action: "Acesso ao Painel Geral", date: "06/11/2026 09:30" },
+            { name: "Grupo Horizonte RH", email: "rh@grupohorizonte.com.br", type: "empresa", idNumber: "12.345.678/0001-90", action: "Publicou vaga de Assistente", date: "06/11/2026 09:15" },
+            { name: "Mariana Souza", email: "mariana.souza@email.com", type: "candidato", idNumber: "456.789.123-00", action: "Candidatou-se a vaga", date: "06/11/2026 08:50" }
+        ];
+
+        let tempRegisteredCandidate = null;
+
+        const brazilCitiesByState = {
+            "SP": ["São Paulo", "Campinas", "Guarulhos", "São Bernardo do Campo", "Santo André", "Osasco", "Ribeirão Preto", "Sorocaba", "Santos", "Bauru"],
+            "RJ": ["Rio de Janeiro", "Niterói", "Duque de Caxias", "Nova Iguaçu", "São Gonçalo", "Petrópolis"],
+            "MG": ["Belo Horizonte", "Uberlândia", "Contagem", "Juiz de Fora", "Betim", "Montes Claros"],
+            "BA": ["Salvador", "Feira de Santana", "Vitória da Conquista", "Camaçari", "Juazeiro"],
+            "RS": ["Porto Alegre", "Caxias do Sul", "Canoas", "Pelotas", "Santa Maria"],
+            "PR": ["Curitiba", "Londrina", "Maringá", "Ponta Grossa", "Cascavel"],
+            "PE": ["Recife", "Jaboatão dos Guararapes", "Olinda", "Caruaru"],
+            "CE": ["Fortaleza", "Caucaia", "Juazeiro do Norte", "Sobral"],
+            "DF": ["Brasília", "Taguatinga", "Ceilândia", "Águas Claras"],
+            "Remoto": ["Nacional / Remoto"]
+        };
+
+        let jobsData = JSON.parse(localStorage.getItem('ofi_jobs')) || [
+            {
+                id: 1,
+                title: "Assistente Administrativo Júnior",
+                company: "Grupo Horizonte",
+                authorType: "empresa",
+                state: "SP",
+                city: "São Paulo",
+                modality: "Presencial",
+                level: "Júnior",
+                salary: "R$ 2.400 / mês",
+                description: "Estamos contratando Assistente Administrativo para integrar nosso time! Principais funções: apoio no faturamento, atendimento ao cliente, organização de arquivos digitais e elaboração de relatórios.",
+                whatsapp: "11988887777",
+                contactEmail: "vagas@grupohorizonte.com.br",
+                allowPlatform: true,
+                likes: 18,
+                date: "Há 2 horas"
+            },
+            {
+                id: 2,
+                title: "Desenvolvedor Front-End React",
+                company: "Conecta Tech Brasil",
+                authorType: "empresa",
+                state: "Remoto",
+                city: "Nacional / Remoto",
+                modality: "Remoto",
+                level: "Júnior",
+                salary: "R$ 3.900 / mês",
+                description: "Oportunidade 100% Home Office para novos talentos da programação! Buscamos profissionais proativos com domínio de HTML5, Tailwind CSS e JavaScript/React.",
+                whatsapp: "11977776666",
+                contactEmail: "tech@conectabrasil.com.br",
+                allowPlatform: true,
+                likes: 34,
+                date: "Há 5 horas"
+            }
+        ];
+
+        const coursesData = [
+            { title: "Gestão Financeira Empresarial", institution: "SEBRAE", hours: "20h", desc: "Aprenda controle de caixa e precificação.", url: "https://www.sebrae.com.br", badge: "Certificado Grátis" },
+            { title: "Lógica de Programação", institution: "Fundação Bradesco", hours: "40h", desc: "Fundamentos de tecnologia e algoritmos.", url: "https://www.ev.org.br", badge: "Mais Acessado" },
+            { title: "Gestão Pública & Cidadania", institution: "EVG Governo Federal", hours: "30h", desc: "Capacitação cidadã oficial.", url: "https://www.escolavirtual.gov.br", badge: "Oficial" },
+            { title: "Marketing Digital", institution: "Google Atelier", hours: "40h", desc: "Destaque em vendas online.", url: "https://www.coursera.org", badge: "Recomendado" },
+            { title: "Excel Avançado para Empresas", institution: "SENAI Play", hours: "25h", desc: "Planilhas e gráficos profissionais.", url: "https://senaiplay.com.br", badge: "Essencial" }
+        ];
+
+        // Increment visit count
+        systemStats.visits += 1;
+        localStorage.setItem('ofi_stats', JSON.stringify(systemStats));
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            if (tabId === 'admin' && (!currentUser || currentUser.type !== 'admin')) {
+                showToast("Acesso restrito. Faça login com a conta de Administrador.", "error");
+                openModal('login-modal');
+                return;
+            }
+
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'gradient-brand', 'shadow-sm', 'font-bold');
+                btn.classList.add('text-brand-plum', 'font-semibold');
+            });
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-white', 'gradient-brand', 'shadow-sm', 'font-bold');
+                activeBtn.classList.remove('text-brand-plum', 'font-semibold');
+            }
+
+            if (tabId === 'admin') renderAdminDashboard();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? 'bg-brand-plum text-brand-pinkLilac border border-brand-vibrant' : 'bg-red-900 text-white';
+            toast.className = `${bg} px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 pointer-events-auto transition duration-300`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check text-brand-pastel' : 'fa-triangle-exclamation'}"></i> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3500);
+        }
+
+        // --- MASKS ---
+        function maskCPF(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            i.value = v;
+        }
+
+        function maskCNPJ(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+            v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            v = v.replace(/(\d{4})(\d)/, "$1-$2");
+            i.value = v;
+        }
+
+        function maskPhone(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+            v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+            i.value = v;
+        }
+
+        function maskCEP(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+            i.value = v;
+        }
+
+        function toggleRegisterType(type) {
+            const candForm = document.getElementById('form-candidate');
+            const compForm = document.getElementById('form-company');
+            const candBtn = document.getElementById('tab-btn-candidate');
+            const compBtn = document.getElementById('tab-btn-company');
+
+            if (type === 'candidato') {
+                candForm.classList.remove('hidden');
+                compForm.classList.add('hidden');
+                candBtn.className = "py-2.5 text-xs font-extrabold rounded-xl transition gradient-brand text-white shadow-md";
+                compBtn.className = "py-2.5 text-xs font-extrabold rounded-xl transition text-brand-plum hover:text-brand-vibrant";
+            } else {
+                candForm.classList.add('hidden');
+                compForm.classList.remove('hidden');
+                compBtn.className = "py-2.5 text-xs font-extrabold rounded-xl transition bg-brand-deep text-white shadow-md";
+                candBtn.className = "py-2.5 text-xs font-extrabold rounded-xl transition text-brand-plum hover:text-brand-vibrant";
+            }
+        }
+
+        // --- AUTH & ONBOARDING CV ---
+        function handleCandidateRegister(e) {
+            e.preventDefault();
+            tempRegisteredCandidate = {
+                name: document.getElementById('cand-name').value,
+                email: document.getElementById('cand-email').value,
+                phone: document.getElementById('cand-phone').value,
+                location: `${document.getElementById('cand-city').value} - ${document.getElementById('cand-state').value}`,
+                idNumber: document.getElementById('cand-cpf').value,
+                type: 'candidato'
+            };
+
+            closeModal('register-modal');
+            openModal('onboarding-cv-modal');
+        }
+
+        function handleOnboardingCV(e) {
+            e.preventDefault();
+            const title = document.getElementById('onb-title').value;
+            const summary = document.getElementById('onb-summary').value;
+            const exp = document.getElementById('onb-exp').value;
+            const edu = document.getElementById('onb-edu').value;
+            const skills = document.getElementById('onb-skills').value;
+
+            document.getElementById('cv-name').value = tempRegisteredCandidate.name;
+            document.getElementById('cv-title').value = title;
+            document.getElementById('cv-email').value = tempRegisteredCandidate.email;
+            document.getElementById('cv-phone').value = tempRegisteredCandidate.phone;
+            document.getElementById('cv-location').value = tempRegisteredCandidate.location;
+            document.getElementById('cv-summary').value = summary;
+            document.getElementById('cv-exp-title').value = exp;
+            document.getElementById('cv-edu').value = edu;
+            document.getElementById('cv-skills').value = skills;
+            updateCV();
+
+            currentUser = tempRegisteredCandidate;
+            logUserAccess(currentUser.name, currentUser.email, 'candidato', currentUser.idNumber, 'Cadastrou-se e preencheu currículo inicial');
+            updateAuthUI();
+            closeModal('onboarding-cv-modal');
+            showToast("Cadastro concluído e currículo gerado com sucesso!");
+        }
+
+        function handleCompanyRegister(e) {
+            e.preventDefault();
+            const email = document.getElementById('comp-email').value;
+            const domain = email.split('@')[1]?.toLowerCase();
+            const blocked = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'bol.com.br'];
+            
+            if (blocked.includes(domain)) {
+                showToast("É necessário um e-mail corporativo válido da empresa.", "error");
+                return;
+            }
+
+            const name = document.getElementById('comp-name').value;
+            const cnpj = document.getElementById('comp-cnpj').value;
+
+            currentUser = { name, email, type: 'empresa', idNumber: cnpj };
+            logUserAccess(name, email, 'empresa', cnpj, 'Novo Cadastro de Empresa');
+            updateAuthUI();
+            closeModal('register-modal');
+            showToast("Empresa Parceira cadastrada com sucesso!");
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const usernameInput = document.getElementById('login-email').value.trim();
+            const passwordInput = document.getElementById('login-password').value.trim();
+
+            if (usernameInput === 'Ofu7ur01mp0r74' && passwordInput === '20Futur026') {
+                currentUser = { name: "Administrador Geral", email: "Ofu7ur01mp0r74", type: "admin", idNumber: "000.000.000-00" };
+                logUserAccess("Administrador", "Ofu7ur01mp0r74", "admin", "000.000.000-00", "Login Administrativo Realizado");
+                updateAuthUI();
+                closeModal('login-modal');
+                showToast("Login de Administrador efetuado com sucesso!");
+                switchTab('admin');
+                return;
+            }
+
+            let type = 'candidato';
+            if (usernameInput.includes('empresa') || usernameInput.includes('rh')) type = 'empresa';
+
+            currentUser = { name: usernameInput.split('@')[0], email: usernameInput, type, idNumber: "Via Login Direto" };
+            logUserAccess(currentUser.name, usernameInput, type, "Via Login Direto", "Efetuou Login");
+            updateAuthUI();
+            closeModal('login-modal');
+            showToast("Login efetuado com sucesso!");
+        }
+
+        function logUserAccess(name, email, type, idNumber, action) {
+            const now = new Date().toLocaleString('pt-BR');
+            usersLog.unshift({ name, email, type, idNumber, action, date: now });
+            localStorage.setItem('ofi_users_log', JSON.stringify(usersLog));
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('ofi_current_user');
+            updateAuthUI();
+            switchTab('vagas');
+            showToast("Você saiu da conta.");
+        }
+
+        function updateAuthUI() {
+            localStorage.setItem('ofi_current_user', JSON.stringify(currentUser));
+
+            const outDiv = document.getElementById('auth-logged-out');
+            const inDiv = document.getElementById('auth-logged-in');
+            const postBtn = document.getElementById('btn-post-job');
+            const postPrompt = document.getElementById('company-post-prompt');
+            const adminNav = document.getElementById('nav-admin');
+            const mobileAdminNav = document.getElementById('mobile-nav-admin');
+
+            if (currentUser) {
+                outDiv.classList.add('hidden');
+                inDiv.classList.remove('hidden');
+                document.getElementById('user-name-display').innerText = currentUser.name;
+                document.getElementById('user-badge').innerText = currentUser.type.toUpperCase();
+                document.getElementById('user-avatar').innerText = currentUser.name.charAt(0).toUpperCase();
+
+                if (currentUser.type === 'admin' || currentUser.type === 'empresa') {
+                    postBtn.classList.remove('hidden');
+                    postBtn.classList.add('flex');
+                    postPrompt.classList.remove('hidden');
+                } else {
+                    postBtn.classList.add('hidden');
+                    postPrompt.classList.add('hidden');
+                }
+
+                if (currentUser.type === 'admin') {
+                    adminNav.classList.remove('hidden');
+                    mobileAdminNav.classList.remove('hidden');
+                } else {
+                    adminNav.classList.add('hidden');
+                    mobileAdminNav.classList.add('hidden');
+                }
+            } else {
+                outDiv.classList.remove('hidden');
+                inDiv.classList.add('hidden');
+                postBtn.classList.add('hidden');
+                postPrompt.classList.add('hidden');
+                adminNav.classList.add('hidden');
+                mobileAdminNav.classList.add('hidden');
+            }
+        }
+
+        // --- LINKEDIN STYLE JOBS FEED RENDER ---
+        function renderJobs(jobsToRender) {
+            const container = document.getElementById('jobs-container');
+            const countBadge = document.getElementById('job-count-badge');
+            const noJobsMsg = document.getElementById('no-jobs-msg');
+
+            container.innerHTML = '';
+            countBadge.innerText = `${jobsToRender.length} vaga(s)`;
+
+            if (jobsToRender.length === 0) {
+                noJobsMsg.classList.remove('hidden');
+                return;
+            } else {
+                noJobsMsg.classList.add('hidden');
+            }
+
+            jobsToRender.forEach(job => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl border border-brand-pastel/40 shadow-sm hover:shadow-md transition overflow-hidden";
+                
+                const waNumber = job.whatsapp ? job.whatsapp.replace(/\D/g, '') : '';
+                const waMessage = encodeURIComponent(`Olá! Vi a vaga de "${job.title}" na plataforma O Futuro Importa! e gostaria de enviar meu currículo.`);
+                const waUrl = `https://wa.me/55${waNumber}?text=${waMessage}`;
+                
+                const mailSubject = encodeURIComponent(`Candidatura: Vaga de ${job.title} - O Futuro Importa!`);
+                const mailUrl = `mailto:${job.contactEmail}?subject=${mailSubject}`;
+
+                const isAdmin = currentUser && currentUser.type === 'admin';
+
+                card.innerHTML = `
+                    <div class="p-5 pb-3 flex items-center justify-between border-b border-brand-pastel/20">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl gradient-brand text-white font-black flex items-center justify-center shadow-md">
+                                <i class="fa-solid ${job.authorType === 'admin' ? 'fa-shield-halved' : 'fa-building'}"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-sm font-extrabold text-brand-plum">${job.company}</h4>
+                                    ${job.authorType === 'admin' ? '<span class="text-[9px] bg-amber-100 text-amber-900 font-black px-2 py-0.5 rounded">OFICIAL ADMIN</span>' : '<span class="text-[9px] bg-brand-lightPink text-brand-deep font-black px-2 py-0.5 rounded">PARCEIRA VERIFICADA</span>'}
+                                </div>
+                                <p class="text-[11px] text-slate-400 font-medium">${job.city} (${job.state}) • ${job.date}</p>
+                            </div>
+                        </div>
+                        ${isAdmin ? `<button onclick="deleteJob(${job.id})" class="text-xs text-red-500 font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i>Excluir</button>` : ''}
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-brand-vibrant bg-brand-lightPink px-3 py-1 rounded-full">
+                                ${job.modality} • ${job.level}
+                            </span>
+                            <h3 class="text-xl font-black text-brand-plum mt-2">${job.title}</h3>
+                            <p class="text-xs font-extrabold text-emerald-600 mt-1"><i class="fa-solid fa-money-bill-wave mr-1"></i>${job.salary || 'Salário a combinar'}</p>
+                        </div>
+
+                        <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">${job.description}</p>
+                    </div>
+
+                    <div class="bg-brand-offwhite p-4 border-t border-brand-pastel/30 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            <button onclick="likeJob(${job.id}, this)" class="flex items-center gap-1.5 text-brand-vibrant hover:text-brand-deep transition">
+                                <i class="fa-regular fa-thumbs-up"></i> <span>${job.likes || 0}</span>
+                            </button>
+                            <span>•</span>
+                            <span>Canais diretos de envio:</span>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            ${job.allowPlatform ? `
+                                <button onclick="openApplyModal('${job.title}')" class="px-4 py-2 bg-brand-deep hover:bg-brand-vibrant text-white text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-paper-plane"></i> Candidatar na Plataforma
+                                </button>
+                            ` : ''}
+
+                            ${job.whatsapp ? `
+                                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5">
+                                    <i class="fa-brands fa-whatsapp"></i> Enviar pelo WhatsApp
+                                </a>
+                            ` : ''}
+
+                            ${job.contactEmail ? `
+                                <a href="${mailUrl}" class="px-4 py-2 bg-slate-800 hover:bg-black text-white text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-envelope"></i> E-mail
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function likeJob(id, btn) {
+            const job = jobsData.find(j => j.id === id);
+            if (job) {
+                job.likes = (job.likes || 0) + 1;
+                localStorage.setItem('ofi_jobs', JSON.stringify(jobsData));
+                btn.querySelector('span').innerText = job.likes;
+                showToast("Você curtiu esta vaga!");
+            }
+        }
+
+        function deleteJob(id) {
+            jobsData = jobsData.filter(j => j.id !== id);
+            localStorage.setItem('ofi_jobs', JSON.stringify(jobsData));
+            renderJobs(jobsData);
+            showToast("Vaga excluída pelo Administrador.");
+        }
+
+        function filterJobs() {
+            const keyword = document.getElementById('filter-keyword').value.toLowerCase();
+            const state = document.getElementById('filter-state').value;
+            const city = document.getElementById('filter-city').value;
+            const modality = document.getElementById('filter-modality').value;
+
+            const filtered = jobsData.filter(job => {
+                const matchKeyword = job.title.toLowerCase().includes(keyword) || 
+                                     job.company.toLowerCase().includes(keyword) || 
+                                     job.description.toLowerCase().includes(keyword);
+                const matchState = state === '' || job.state === state;
+                const matchCity = city === '' || job.city === city;
+                const matchModality = modality === '' || job.modality === modality;
+
+                return matchKeyword && matchState && matchCity && matchModality;
+            });
+
+            renderJobs(filtered);
+        }
+
+        function handleStateFilterChange() {
+            const state = document.getElementById('filter-state').value;
+            const citySelect = document.getElementById('filter-city');
+
+            citySelect.innerHTML = '<option value="">Todas as Cidades</option>';
+
+            if (state && brazilCitiesByState[state]) {
+                brazilCitiesByState[state].forEach(city => {
+                    const opt = document.createElement('option');
+                    opt.value = city;
+                    opt.innerText = city;
+                    citySelect.appendChild(opt);
+                });
+            }
+            filterJobs();
+        }
+
+        function resetJobFilters() {
+            document.getElementById('filter-keyword').value = '';
+            document.getElementById('filter-state').value = '';
+            document.getElementById('filter-city').value = '';
+            document.getElementById('filter-modality').value = '';
+            handleStateFilterChange();
+        }
+
+        // --- POST JOB ---
+        function handlePostJob(e) {
+            e.preventDefault();
+            if (!currentUser || (currentUser.type !== 'admin' && currentUser.type !== 'empresa')) {
+                showToast("Apenas Empresas Cadastradas ou o Administrador podem postar vagas.", "error");
+                return;
+            }
+
+            const newJob = {
+                id: Date.now(),
+                title: document.getElementById('job-title-input').value,
+                company: currentUser.name,
+                authorType: currentUser.type,
+                state: document.getElementById('job-state-input').value,
+                city: document.getElementById('job-city-input').value,
+                modality: document.getElementById('job-modality-input').value,
+                level: document.getElementById('job-level-input').value,
+                salary: document.getElementById('job-salary-input').value,
+                description: document.getElementById('job-desc-input').value,
+                whatsapp: document.getElementById('job-whatsapp-input').value,
+                contactEmail: document.getElementById('job-contact-email-input').value,
+                allowPlatform: document.getElementById('job-allow-platform').checked,
+                likes: 0,
+                date: "Agora mesmo"
+            };
+
+            jobsData.unshift(newJob);
+            localStorage.setItem('ofi_jobs', JSON.stringify(jobsData));
+            renderJobs(jobsData);
+            closeModal('post-job-modal');
+            showToast("Vaga publicada no feed com sucesso!");
+            e.target.reset();
+        }
+
+        // --- APPLY MODAL & QUIZ ---
+        let selectedJobTitle = '';
+        function openApplyModal(title) {
+            if (!currentUser) {
+                openModal('login-modal');
+                showToast("Faça login para se candidatar.", "error");
+                return;
+            }
+            selectedJobTitle = title;
+            document.getElementById('apply-job-title').innerText = title;
+            openModal('apply-modal');
+        }
+
+        function toggleUploadBox(show) {
+            const box = document.getElementById('upload-box');
+            if (show) box.classList.remove('hidden');
+            else box.classList.add('hidden');
+        }
+
+        function confirmApplication(e) {
+            e.preventDefault();
+            const ptAns = document.getElementById('quiz-pt').value;
+            const matAns = document.getElementById('quiz-mat').value;
+            const logAns = document.getElementById('quiz-log').value;
+
+            if (ptAns === 'errado' || matAns === 'errado' || logAns === 'errado') {
+                showToast("Atenção: Alguma resposta da triagem incorreta. Reveja suas respostas.", "error");
+                return;
+            }
+
+            systemStats.applies += 1;
+            localStorage.setItem('ofi_stats', JSON.stringify(systemStats));
+            logUserAccess(currentUser.name, currentUser.email, currentUser.type, currentUser.idNumber, `Candidatou-se a: ${selectedJobTitle} (Triagem Aprovada)`);
+            closeModal('apply-modal');
+            showToast(`Candidatura enviada com sucesso para "${selectedJobTitle}"!`);
+        }
+
+        // --- ADMIN DASHBOARD RENDER ---
+        function renderAdminDashboard() {
+            document.getElementById('stat-visits').innerText = systemStats.visits;
+            document.getElementById('stat-candidates').innerText = usersLog.filter(u => u.type === 'candidato').length + 15;
+            document.getElementById('stat-companies').innerText = usersLog.filter(u => u.type === 'empresa').length + 4;
+            document.getElementById('stat-jobs').innerText = jobsData.length;
+            document.getElementById('stat-applies').innerText = systemStats.applies;
+
+            const table = document.getElementById('admin-users-table');
+            table.innerHTML = '';
+
+            usersLog.forEach(log => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-4 font-semibold text-slate-500">${log.date}</td>
+                    <td class="p-4 font-bold text-brand-plum">${log.name}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded text-[10px] font-black uppercase ${log.type === 'admin' ? 'bg-amber-100 text-amber-900' : log.type === 'empresa' ? 'bg-purple-100 text-brand-deep' : 'bg-slate-100 text-slate-700'}">${log.type}</span></td>
+                    <td class="p-4">${log.email}</td>
+                    <td class="p-4 font-mono">${log.idNumber || '-'}</td>
+                    <td class="p-4 font-bold text-brand-vibrant">${log.action}</td>
+                `;
+                table.appendChild(tr);
+            });
+        }
+
+        function clearSystemLogs() {
+            usersLog = [];
+            localStorage.removeItem('ofi_users_log');
+            renderAdminDashboard();
+            showToast("Registros limpos.");
+        }
+
+        // --- GOOGLE JOBS SEARCH ---
+        function searchGoogleJobs() {
+            const keyword = document.getElementById('filter-keyword').value || 'vagas de emprego';
+            const state = document.getElementById('filter-state').value;
+            const city = document.getElementById('filter-city').value;
+            const location = city ? `${city} ${state}` : (state || 'Brasil');
+            const query = encodeURIComponent(`${keyword} ${location}`);
+            window.open(`https://www.google.com/search?q=${query}&ibp=htl;jobs`, '_blank');
+        }
+
+        // --- RESUME GENERATOR ---
+        function updateCV() {
+            document.getElementById('preview-name').innerText = document.getElementById('cv-name').value || 'Seu Nome Aqui';
+            document.getElementById('preview-title').innerText = document.getElementById('cv-title').value || 'Seu Cargo Desejado';
+            document.getElementById('preview-email').innerHTML = `<i class="fa-solid fa-envelope text-brand-vibrant mr-1"></i>${document.getElementById('cv-email').value || 'email@exemplo.com'}`;
+            document.getElementById('preview-phone').innerHTML = `<i class="fa-solid fa-phone text-brand-vibrant mr-1"></i>${document.getElementById('cv-phone').value || '(00) 00000-0000'}`;
+            document.getElementById('preview-location').innerHTML = `<i class="fa-solid fa-location-dot text-brand-vibrant mr-1"></i>${document.getElementById('cv-location').value || 'Cidade - UF'}`;
+            document.getElementById('preview-summary').innerText = document.getElementById('cv-summary').value || 'Preencha os campos ao lado...';
+            document.getElementById('preview-exp-title').innerText = document.getElementById('cv-exp-title').value || 'Cargo & Empresa';
+            document.getElementById('preview-exp-period').innerText = document.getElementById('cv-exp-period').value || 'Período';
+            document.getElementById('preview-exp-desc').innerText = document.getElementById('cv-exp-desc').value || 'Descrição das funções...';
+            document.getElementById('preview-edu').innerText = document.getElementById('cv-edu').value || 'Formação Acadêmica';
+
+            const skillsContainer = document.getElementById('preview-skills');
+            skillsContainer.innerHTML = '';
+            (document.getElementById('cv-skills').value || 'Proatividade, Excel').split(',').forEach(s => {
+                if (s.trim()) {
+                    const span = document.createElement('span');
+                    span.className = "px-2.5 py-1 bg-brand-lightPink text-brand-deep font-bold rounded text-[11px]";
+                    span.innerText = s.trim();
+                    skillsContainer.appendChild(span);
+                }
+            });
+        }
+
+        // --- COURSES RENDER ---
+        function renderCourses() {
+            const container = document.getElementById('courses-grid');
+            container.innerHTML = '';
+            coursesData.forEach(c => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl border border-brand-pastel/40 shadow-sm flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-[10px] font-extrabold bg-brand-lightPink text-brand-deep px-2.5 py-1 rounded">${c.badge}</span>
+                            <span class="text-xs text-slate-400 font-bold"><i class="fa-regular fa-clock mr-1"></i>${c.hours}</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-brand-plum mb-1">${c.title}</h3>
+                        <p class="text-xs font-bold text-brand-vibrant mb-2">${c.institution}</p>
+                        <p class="text-xs text-slate-500 mb-4">${c.desc}</p>
+                    </div>
+                    <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-brand-offwhite hover:bg-brand-vibrant hover:text-white text-brand-deep rounded-xl text-xs font-bold transition text-center border border-brand-pastel/40">
+                        Acessar Cursos Grátis <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.onload = function() {
+            updateAuthUI();
+            handleStateFilterChange();
+            renderCourses();
+            renderJobs(jobsData);
+        };
+    </script>
+</body>
+</html>
